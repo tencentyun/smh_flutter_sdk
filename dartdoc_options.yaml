@@ -1,0 +1,6 @@
+dartdoc:
+  nodoc: [
+      'lib/beacon/**',
+      'lib/utils/**',
+      'lib/model/generated/**',
+  ]
