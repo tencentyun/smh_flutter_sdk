@@ -37,6 +37,7 @@ smh_flutter_sdk:
 smh_flutter_sdk:
     git:
       url: https://github.com/tencentyun/smh_flutter_sdk.git
+      ref: 'slim'
 ```
 
 ## 第三步：开始使用
