@@ -208,11 +208,9 @@ packages:
   smh_flutter_beacon_plugin:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "1.0.0"
-      resolved-ref: b52937ce22c67112ad06b4130576aa58a917708e
-      url: "https://github.com/tencentyun/smh_flutter_beacon_plugin.git"
-    source: git
+      path: "../smh_flutter_beacon_plugin"
+      relative: true
+    source: path
     version: "1.0.0"
   source_span:
     dependency: transitive

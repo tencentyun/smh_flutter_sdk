@@ -133,7 +133,8 @@ class SMHService {
     if (error.response?.data is Map) {
       smhError.smhCode = error.response?.data?['code'];
       smhError.smhMessage = error.response?.data?['message'];
-      smhError.smhZhMessage = SMHErrorCode.getZHMessage(smhError.smhCode);
+      smhError.smhZhMessage =
+          SMHErrorCode.getZHMessage(smhError.smhCode) ?? smhError.smhMessage;
       smhError.requestId = error.response?.data?['requestId'];
     }
 

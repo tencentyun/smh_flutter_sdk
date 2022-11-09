@@ -918,9 +918,9 @@ class SMHErrorCode {
     'GroupOwnerCanNotExit': '群组所有者无法退出'
   };
 
-  static getZHMessage(String? code) {
+  static String? getZHMessage(String? code) {
     if (code == null || !SMHErrorZHMessageMap.keys.contains(code)) {
-      return '未知错误';
+      return null;
     }
     return SMHErrorZHMessageMap[code];
   }
