@@ -1,9 +1,12 @@
 enum SMHSmsCodeType {
-  signIn,
-  bindMeetingPhone,
-  bindWechatPhone,
-  bindYufuPhone,
-  bindWeworkPhone,
+  signIn('sign-in'),
+  bindMeetingPhone('bind-meeting-phone'),
+  bindWechatPhone('bind-wechat-phone'),
+  bindYufuPhone('bind-yufu-phone'),
+  bindWeworkPhone('bind-wework-phone');
+
+  final String name;
+  const SMHSmsCodeType(this.name);
 }
 
 enum SMHAuthType {
