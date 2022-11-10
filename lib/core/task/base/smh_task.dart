@@ -163,15 +163,28 @@ abstract class SMHTask<T> extends Object {
             reportParams['cos_request_id'] = error.cosRequestId ?? '';
             reportParams['request_id'] = error.requestId ?? '';
             _state = SMHTaskState.error;
+
+            int fileSize = 0;
+
             if (getTaskInfo().option == SMHTaskOption.upload) {
               reportParams['size'] = getTaskInfo().length.toString();
+              fileSize = getTaskInfo().length;
               SMHBeaconManager.manager
                   .reportFail(params: reportParams, eventCode: 'smh_upload');
             } else {
-              reportParams['size'] =
-                  File(getTaskInfo().localPath).lengthSync().toString();
+              fileSize = File(getTaskInfo().localPath).lengthSync();
+              reportParams['size'] = fileSize.toString();
               SMHBeaconManager.manager
                   .reportFail(params: reportParams, eventCode: 'smh_download');
+            }
+
+            int tookTime = DateTime.now().difference(startTime).inSeconds;
+            if (tookTime > 0 && fileSize > 0) {
+              if ((fileSize / tookTime) > 512 * 1024) {
+                SMHTaskManager.instance.increaseConcurrentCount();
+              } else {
+                SMHTaskManager.instance.decreaseConcurrentCount();
+              }
             }
           } else {
             _state = SMHTaskState.success;

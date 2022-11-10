@@ -22,6 +22,18 @@ class SMHTaskManager {
     taskQueue.customConcurrentCount = count;
   }
 
+  increaseConcurrentCount() {
+    if (taskQueue.customConcurrentCount < taskQueue.maxConcurrentCount) {
+      taskQueue.customConcurrentCount++;
+    }
+  }
+
+  decreaseConcurrentCount() {
+    if (taskQueue.customConcurrentCount > 2) {
+      taskQueue.customConcurrentCount--;
+    }
+  }
+
   addTask(SMHTask task) {
     taskQueue.addTask(task);
   }
