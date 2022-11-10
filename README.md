@@ -14,7 +14,7 @@
 ```
 
 ## 第一步：SDK 介绍
-smh_flutter_sdk 目前支持iOS、Android。
+smh_flutter_sdk 目前兼容支持iOS、Android。
 分为两个版本：
 |名称| 功能描述 |
 |:-----| :-----|
@@ -29,20 +29,20 @@ smh_flutter_sdk 目前支持iOS、Android。
 ```
 smh_flutter_sdk:
     git:
-      url: https://github.com/tencentyun/smh_flutter_sdk.git
+      url: https://github.com/tencentyun/smh-flutter-sdk.git
 ```
 
 #### 集成不含灯塔版本
 ```
 smh_flutter_sdk:
     git:
-      url: https://github.com/tencentyun/smh_flutter_sdk.git
+      url: https://github.com/tencentyun/smh-flutter-sdk.git
       ref: 'slim'
 ```
-
 ## 第三步：开始使用
 
 #### 1. 自定义Accesstoken刷新类
+>? sdk内部已经做了accesstoken缓存。业务测需要提供accessToken的刷新机制。
 
 自定义 AccessToken刷新工具类并实现 SMHRefreshAccessTokenHander 接口。
 实例代码参考：
@@ -56,8 +56,8 @@ class CustomRefreshAccessTokenHander extends SMHRefreshAccessTokenHander {
       SMHResponse? response;
       try {
         response = await SMHUserSpaceApis.getUserInfoAndAccessToken(
-            organizationId: User.currentUser.organizationId!,
-            userToken: User.currentUser.userToken!);
+            organizationId: organizationId, // 用户组织id
+            userToken: userToken); // 用户UserToken
       } catch (e) {}
       return response?.data;
     } else {
@@ -65,10 +65,10 @@ class CustomRefreshAccessTokenHander extends SMHRefreshAccessTokenHander {
       SMHResponse? response;
       try {
         response = await SMHUserSpaceApis.getSpaceAccessToken(
-            organizationId: User.currentUser.organizationId!,
-            userToken: User.currentUser.userToken!,
-            spaceId: spaceId,
-            spaceOrgId: spaceOrgId);
+            organizationId:organizationId, // 用户组织id
+            userToken: userToken, // 用户UserToken
+            spaceId: spaceId, // 用户空间id
+            spaceOrgId: spaceOrgId); // 当前空间 所属组织id。可选
       } catch (e) {}
       return response?.data;
     }
@@ -128,6 +128,19 @@ SMHServicesManager().initBeaconSDK(
           dirPath: '/');
     } on SMHError catch (e) {
     }
+```
+
+## 文件传输任务队列并发数设置
+该项为选择性设置，支持自定义并发数量，也可以使用sdk默认策略。
+任务并发数根据当前网速自动调节，当前并发数最大不能超过最大并发数，最小为2.
+
+* 设置最大任务并发数（默认5）：
+```
+SMHTaskManager.instance.setMaxConcurrentCount(8);
+```
+* 设置当前任务并发数（默认3）：
+```
+SMHTaskManager.instance.setCustomConcurrentCount(5);
 ```
 
 ## 通用参数介绍
