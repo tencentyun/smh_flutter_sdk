@@ -65,7 +65,6 @@ class SMHAPIRecycledApis {
     required String libraryId,
     required String spaceId,
     required int recycledItemId,
-    required String accessToken,
     String? userId,
     SMHConflictResolutionStrategy conflictResolutionStrategy =
         SMHConflictResolutionStrategy.ask,
