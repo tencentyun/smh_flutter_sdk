@@ -192,7 +192,7 @@ class SMHUserShareApis {
     SMHOrderByType orderByType = SMHOrderByType.desc,
     SMHFinishCalBack? finishCallback,
   }) {
-    var query = {
+    Map<String, dynamic> query = {
       'order_by': orderBy.name,
       'order_by_type': orderByType.name,
       'user_token': userToken

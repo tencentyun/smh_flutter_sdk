@@ -292,7 +292,7 @@ class SMHUserLoginApis {
     if (from == null) {
       from = SMHPlatformType.web;
     }
-    query.addAll({'from': from.toString()});
+    query.addAll({'from': from.name.toString()});
     query.addAll({'auto_redirect': autoRedirect});
     query.addKeyWithObject('custom_state', customState);
 

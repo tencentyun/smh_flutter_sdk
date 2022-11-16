@@ -142,7 +142,6 @@ abstract class SMHTask<T> extends Object {
       if (data['code'] == 'finish') {
         if (finishCalBack != null) {
           SMHError? error = data['error'];
-
           reportParams['took_time'] =
               DateTime.now().difference(startTime).inMilliseconds.toString();
           reportParams['space_id'] = getTaskInfo().spaceId;
@@ -163,14 +162,12 @@ abstract class SMHTask<T> extends Object {
             reportParams['cos_request_id'] = error.cosRequestId ?? '';
             reportParams['request_id'] = error.requestId ?? '';
             _state = SMHTaskState.error;
-
             int fileSize = 0;
-
             if (getTaskInfo().option == SMHTaskOption.upload) {
               reportParams['size'] = getTaskInfo().length.toString();
-              fileSize = getTaskInfo().length;
               SMHBeaconManager.manager
                   .reportFail(params: reportParams, eventCode: 'smh_upload');
+              fileSize = getTaskInfo().length;
             } else {
               fileSize = File(getTaskInfo().localPath).lengthSync();
               reportParams['size'] = fileSize.toString();

@@ -62,7 +62,7 @@ class SMHUserAuthorityApis {
     SMHFileListOrderBy orderBy = SMHFileListOrderBy.name,
     SMHFinishCalBack? finishCallback,
   }) {
-    var query = {
+    Map<String,dynamic> query = {
       'user_token': userToken,
       'order_by': orderBy.name,
       'order_by_type': orderByType.name
@@ -105,7 +105,7 @@ class SMHUserAuthorityApis {
     SMHFileListOrderBy orderBy = SMHFileListOrderBy.name,
     SMHFinishCalBack? finishCallback,
   }) {
-    var query = {
+    Map<String,dynamic> query = {
       'user_token': userToken,
       'order_by': orderBy.name,
       'order_by_type': orderByType.name

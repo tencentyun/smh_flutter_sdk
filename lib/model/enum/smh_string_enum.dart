@@ -166,6 +166,7 @@ enum SMHMessageReadState {
   unRead,
 }
 
+/// 标签类型，可选参数，0 字符串标签，1 键值对标签；
 enum SMHTagType {
   string,
   keyValue,

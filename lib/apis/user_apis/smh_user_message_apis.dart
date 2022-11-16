@@ -178,7 +178,7 @@ class SMHUesrMessageApis {
     int? limit,
     SMHFinishCalBack? finishCallback,
   }) {
-    var query = {
+    Map<String, dynamic> query = {
       'type': messageType!.index,
       'read_state': readState!.index,
       'user_token': userToken

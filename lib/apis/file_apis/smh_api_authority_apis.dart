@@ -121,7 +121,10 @@ class SMHAPIAuthorityApis {
     SMHOrderBy orderBy = SMHOrderBy.name,
     SMHFinishCalBack? finishCallback,
   }) {
-    var query = {'order_by': orderBy.name, 'order_by_type': orderByType.name};
+    Map<String, dynamic> query = {
+      'order_by': orderBy.name,
+      'order_by_type': orderByType.name
+    };
 
     if (marker != null && limit != null) {
       query.addKeyWithObject('marker', marker);
