@@ -124,6 +124,8 @@ enum SMHSpaceTag {
   personal,
   team,
   user,
+  group,
+
 }
 
 enum SMHConflictResolutionStrategy {
