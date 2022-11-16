@@ -422,6 +422,10 @@ class JsonConvert {
     if (value == null) {
       return null;
     }
+    if(value.runtimeType != List){
+      return null;
+    }
+
     try {
       return (value as List<dynamic>).map((dynamic e) => asT<T>(e)!).toList();
     } catch (e, stackTrace) {
