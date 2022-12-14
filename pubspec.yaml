@@ -15,6 +15,3 @@ dependencies:
   crypto: ^3.0.1
   intl: 0.17.0
   package_info_plus:
-  smh_flutter_beacon_plugin:
-    git:
-      url: https://github.com/tencentyun/smh_flutter_beacon_plugin.git

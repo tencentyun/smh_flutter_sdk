@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:smh_flutter_beacon_plugin/beacon_flutter.dart';
 
 class SMHBeaconManager {
   static final String sdkVersion = '1.0.0';
@@ -44,12 +43,6 @@ class SMHBeaconManager {
     commonParams['app_name'] = packageInfo.appName;
     commonParams['smhsdk_version'] = sdkVersion;
     commonParams['smhsdk_version_code'] = sdkVersion;
-    try {
-      await BeaconNative.singleton
-          .init(appKey, '', userId: userId, isDebug: isDebug);
-      enable = true;
-    } catch (e) {}
-    print("getQIMEI:${await BeaconNative.singleton.getQIMEI(appKey)}");
   }
 
   reportFail({
@@ -74,13 +67,6 @@ class SMHBeaconManager {
       params['network_type'] = 'NONE';
     }
     params['event_result'] = 'Failure';
-    try {
-      await BeaconNative.singleton.reportAction(eventCode,
-          appKey: appKey,
-          isSucceed: false,
-          eventType: eventType,
-          params: params);
-    } catch (_) {}
   }
 
   reportSuccess({
@@ -104,9 +90,5 @@ class SMHBeaconManager {
       params['network_type'] = 'NONE';
     }
     params['event_result'] = 'Success';
-    try {
-      await BeaconNative.singleton.reportAction(eventCode,
-          appKey: appKey, isSucceed: true, eventType: 0, params: params);
-    } catch (_) {}
   }
 }
