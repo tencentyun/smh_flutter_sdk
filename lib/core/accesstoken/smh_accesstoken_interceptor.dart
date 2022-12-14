@@ -1,6 +1,7 @@
 import 'package:smh_flutter_sdk/core/accesstoken/smh_accesstoken_cache.dart';
 import 'package:smh_flutter_sdk/core/accesstoken/smh_refresh_accesstoken_handler.dart';
 import 'package:smh_flutter_sdk/core/base/smh_service.dart';
+import 'package:smh_flutter_sdk/core/error/smh_error.dart';
 import 'package:smh_flutter_sdk/model/user_model/s_m_h_access_token_entity.dart';
 import 'package:dio/dio.dart';
 
@@ -75,7 +76,15 @@ class SMHAccessTokenInterceptor extends QueuedInterceptorsWrapper {
         Future accessFuture = Future.microtask(() {
           return accessTokenHander?.refreshAccessToken(spaceId, spaceOrgId);
         });
-        SMHAccessTokenEntity? accessInfo = await accessFuture;
+
+        SMHAccessTokenEntity? accessInfo;
+        try {
+          accessInfo = await accessFuture;
+        } on SMHError catch (_) {
+          handler.next(err);
+          return;
+        }
+
         String? token = accessInfo?.accessToken;
         if (token == null) {
           handler.next(err);

@@ -24,7 +24,8 @@ class SMHUserRecycledApis {
     required String organizationId,
     required String userToken,
     required List<SMHRecycleInputItemEntity> recycledItems,
-    required bool withAllGroups,
+    bool withAllGroups = false,
+    bool withAllTeams = false,
     SMHFinishCalBack? finishCallback,
   }) {
     return SMHPostRequest().request(
@@ -33,7 +34,8 @@ class SMHUserRecycledApis {
       query: {'user_token': userToken},
       body: {
         'recycledItems': recycledItems.map((e) => e.toJson()).toList(),
-        'withAllGroups': withAllGroups
+        'withAllGroups': withAllGroups,
+        'withAllTeams': withAllTeams,
       },
       finishCallback: finishCallback,
     );

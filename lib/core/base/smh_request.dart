@@ -170,7 +170,7 @@ abstract class SMHRequest<T> {
           }
         }
 
-        reportParams['name'] = serviceName;
+        reportParams['service_name'] = serviceName;
         Future(() =>
             {SMHBeaconManager.manager.reportSuccess(params: reportParams)});
       }
@@ -183,8 +183,8 @@ abstract class SMHRequest<T> {
     } on DioError catch (e) {
       SMHError smhError = service.errorFactory(e);
       if (Isolate.current.debugName == 'main') {
-        reportParams['error_service_name'] = serviceName;
-        reportParams['error_status_code'] = smhError.statusCode.toString();
+        reportParams['service_name'] = serviceName;
+        reportParams['status_code'] = smhError.statusCode.toString();
         reportParams['error_message'] = smhError.statusMessage.toString() +
             ':' +
             smhError.smhMessage.toString();
@@ -199,14 +199,15 @@ abstract class SMHRequest<T> {
       if (finishCallback != null) {
         finishCallback(null, smhError);
       } else {
+        print(smhError.toJson().toString());
         throw (smhError);
       }
     } catch (e) {
       SMHError smhError = SMHError();
       smhError.error = e;
       if (Isolate.current.debugName == 'main') {
-        reportParams['error_service_name'] = serviceName;
-        reportParams['error_status_code'] = e.toString();
+        reportParams['service_name'] = serviceName;
+        reportParams['status_code'] = e.toString();
         reportParams['error_message'] = e.toString();
         reportParams['error_code'] = e.toString();
         reportParams['error_type'] = e.toString();

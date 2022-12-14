@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:smh_flutter_beacon_plugin/beacon_flutter.dart';
 
 class SMHBeaconManager {
   static final String sdkVersion = '1.0.0';
-  static final String appKey = '0DOU0185345PI5WR';
-
+  static final String androidAppKey = '0AND056LZDOVYY8P';
+  static final String iosAppKey = '0IOS056LZFVC0H5P';
+  String appKey = '';
   static final SMHBeaconManager manager = SMHBeaconManager._internal();
   bool enable = false;
   late String userId;
@@ -30,22 +31,25 @@ class SMHBeaconManager {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (Platform.isIOS) {
       commonParams['flutter_platform'] = 'ios';
+      appKey = iosAppKey;
     }
 
     if (Platform.isAndroid) {
       commonParams['flutter_platform'] = 'android';
+      appKey = androidAppKey;
     }
     commonParams['organization_id'] = organizationId;
     commonParams['user_id'] = userId;
-    commonParams['boundle_id'] = packageInfo.packageName;
+    commonParams['smh_boundle_id'] = packageInfo.packageName;
     commonParams['app_name'] = packageInfo.appName;
-    commonParams['smh_sdk_version'] = sdkVersion;
-    commonParams['smh_sdk_version_code'] = sdkVersion;
+    commonParams['smhsdk_version'] = sdkVersion;
+    commonParams['smhsdk_version_code'] = sdkVersion;
     try {
       await BeaconNative.singleton
           .init(appKey, '', userId: userId, isDebug: isDebug);
       enable = true;
     } catch (e) {}
+    print("getQIMEI:${await BeaconNative.singleton.getQIMEI(appKey)}");
   }
 
   reportFail({
@@ -56,7 +60,6 @@ class SMHBeaconManager {
     if (enable == false) {
       return;
     }
-    params = {};
     params.addAll(commonParams);
 
     Connectivity connectivity = Connectivity();
@@ -70,13 +73,13 @@ class SMHBeaconManager {
     if (result == ConnectivityResult.none) {
       params['network_type'] = 'NONE';
     }
-    params['result'] = 'Failure';
+    params['event_result'] = 'Failure';
     try {
       await BeaconNative.singleton.reportAction(eventCode,
           appKey: appKey,
           isSucceed: false,
           eventType: eventType,
-          params: commonParams);
+          params: params);
     } catch (_) {}
   }
 
@@ -100,7 +103,7 @@ class SMHBeaconManager {
     if (result == ConnectivityResult.none) {
       params['network_type'] = 'NONE';
     }
-    params['result'] = 'Success';
+    params['event_result'] = 'Success';
     try {
       await BeaconNative.singleton.reportAction(eventCode,
           appKey: appKey, isSucceed: true, eventType: 0, params: params);

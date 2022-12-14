@@ -152,8 +152,8 @@ abstract class SMHTask<T> extends Object {
                   .servicesManager.serviceMap[SMHAPIServiceKey]?.baseUrl +
               getTaskInfo().filePath;
           if (error != null) {
-            reportParams['error_service_name'] = SMHRequest.getServiceName();
-            reportParams['error_status_code'] = error.statusCode.toString();
+            reportParams['service_name'] = SMHRequest.getServiceName();
+            reportParams['status_code'] = error.statusCode.toString();
             reportParams['error_message'] = error.statusMessage.toString() +
                 ':' +
                 error.smhMessage.toString();
@@ -162,17 +162,33 @@ abstract class SMHTask<T> extends Object {
             reportParams['cos_request_id'] = error.cosRequestId ?? '';
             reportParams['request_id'] = error.requestId ?? '';
             _state = SMHTaskState.error;
-            int fileSize = 0;
             if (getTaskInfo().option == SMHTaskOption.upload) {
-              reportParams['size'] = getTaskInfo().length.toString();
               SMHBeaconManager.manager
                   .reportFail(params: reportParams, eventCode: 'smh_upload');
-              fileSize = getTaskInfo().length;
             } else {
-              fileSize = File(getTaskInfo().localPath).lengthSync();
-              reportParams['size'] = fileSize.toString();
               SMHBeaconManager.manager
                   .reportFail(params: reportParams, eventCode: 'smh_download');
+            }
+          } else {
+            _state = SMHTaskState.success;
+
+            int fileSize = 0;
+            if (getTaskInfo().option == SMHTaskOption.upload) {
+              fileSize = getTaskInfo().length;
+              reportParams['service_name'] = 'SMHTransferService.upload';
+              reportParams['size'] = getTaskInfo().length.toString();
+              SMHBeaconManager.manager.reportSuccess(
+                params: reportParams,
+                eventCode: 'smh_upload',
+              );
+            } else {
+              fileSize = File(getTaskInfo().localPath).lengthSync();
+              reportParams['service_name'] = 'SMHTransferService.download';
+              reportParams['size'] = fileSize.toString();
+              SMHBeaconManager.manager.reportSuccess(
+                params: reportParams,
+                eventCode: 'smh_download',
+              );
             }
 
             int tookTime = DateTime.now().difference(startTime).inSeconds;
@@ -183,25 +199,8 @@ abstract class SMHTask<T> extends Object {
                 SMHTaskManager.instance.decreaseConcurrentCount();
               }
             }
-          } else {
-            _state = SMHTaskState.success;
-            if (getTaskInfo().option == SMHTaskOption.upload) {
-              reportParams['name'] = 'SMHTransferService.upload';
-              reportParams['size'] = getTaskInfo().length.toString();
-              SMHBeaconManager.manager.reportSuccess(
-                params: reportParams,
-                eventCode: 'smh_upload',
-              );
-            } else {
-              reportParams['name'] = 'SMHTransferService.download';
-              reportParams['size'] =
-                  File(getTaskInfo().localPath).lengthSync().toString();
-              SMHBeaconManager.manager.reportSuccess(
-                params: reportParams,
-                eventCode: 'smh_download',
-              );
-            }
           }
+
           stateStream.add(_state);
           finishCalBack!(data['result'], error);
         }

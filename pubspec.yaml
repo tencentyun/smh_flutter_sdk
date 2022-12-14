@@ -3,7 +3,7 @@ description: 腾讯云媒资托管_flutter SDK
 version: 1.0.0
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
   flutter: ">=3.0.0 <4.0.0"
 dependencies:
   flutter:
