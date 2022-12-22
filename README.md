@@ -143,6 +143,9 @@ SMHTaskManager.instance.setMaxConcurrentCount(8);
 SMHTaskManager.instance.setCustomConcurrentCount(5);
 ```
 
+## 如何卸载SDK
+* 再pubspec.yaml文件中删除对本sdk的依赖，执行 Pub get 即可。
+
 ## 通用参数介绍
 
 * LibraryId: 媒体库 ID，必选参数；
